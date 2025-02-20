@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticker Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B6B',
+                        secondary: '#4ECDC4'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <header class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-['Pacifico'] text-primary">logo</a>
+                    <nav class="hidden md:flex ml-10 space-x-8">
+                        <a href="#" class="text-gray-700 hover:text-primary">Shop</a>
+                        <a href="#" class="text-gray-700 hover:text-primary">Custom Orders</a>
+                        <a href="#" class="text-gray-700 hover:text-primary">Blog</a>
+                        <a href="#" class="text-gray-700 hover:text-primary">About</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <input type="text" placeholder="Search stickers..." class="w-64 pl-10 pr-4 py-2 text-sm bg-gray-50 rounded-full border-none focus:ring-2 focus:ring-primary/20">
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center">
+                            <i class="ri-search-line text-gray-400"></i>
+                        </div>
+                    </div>
+                    <button class="relative w-10 h-10 flex items-center justify-center">
+                        <i class="ri-heart-line text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-white text-xs rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <button class="relative w-10 h-10 flex items-center justify-center" onclick="toggleCart()">
+                        <i class="ri-shopping-cart-line text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-white text-xs rounded-full flex items-center justify-center">2</span>
+                    </button>
+                    <button class="w-10 h-10 flex items-center justify-center" onclick="toggleUserMenu()">
+                        <i class="ri-user-line text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="mt-16">
+        <section class="relative bg-gradient-to-r from-[#FFF5F5] to-[#F5F5F5] overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 py-20">
+                <div class="flex items-center">
+                    <div class="w-1/2 pr-12">
+                        <h1 class="text-5xl font-bold mb-6">Express Yourself with Custom Stickers</h1>
+                        <p class="text-gray-600 text-lg mb-8">Transform your ideas into high-quality stickers. Perfect for laptops, water bottles, or anywhere you want to add your personal touch.</p>
+                        <div class="flex space-x-4">
+                            <button class="bg-primary text-white px-8 py-3 !rounded-button hover:bg-primary/90 whitespace-nowrap">Shop Now</button>
+                            <button class="bg-white text-primary px-8 py-3 !rounded-button border-2 border-primary hover:bg-primary/5 whitespace-nowrap">Custom Design</button>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <img src="https://public.readdy.ai/ai/img_res/b27833a041ac1fceacab74ba5615af41.jpg" class="w-full h-auto rounded-lg shadow-xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-8">Popular Categories</h2>
+                <div class="grid grid-cols-4 gap-6">
+                    <div class="category-card bg-[#F8F9FA] rounded-lg p-6 text-center cursor-pointer hover:shadow-lg transition-shadow">
+                        <img src="https://public.readdy.ai/ai/img_res/48cb9b1430aacceb1c2f17626947bd6d.jpg" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-semibold">Aesthetic</h3>
+                        <p class="text-gray-500">142 items</p>
+                    </div>
+                    <div class="category-card bg-[#F8F9FA] rounded-lg p-6 text-center cursor-pointer hover:shadow-lg transition-shadow">
+                        <img src="https://public.readdy.ai/ai/img_res/3b7f89300d82a51dc1cd4b2405325d58.jpg" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-semibold">Anime</h3>
+                        <p class="text-gray-500">98 items</p>
+                    </div>
+                    <div class="category-card bg-[#F8F9FA] rounded-lg p-6 text-center cursor-pointer hover:shadow-lg transition-shadow">
+                        <img src="https://public.readdy.ai/ai/img_res/ab029bbe9b3af20bad787239c98aae43.jpg" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-semibold">Gaming</h3>
+                        <p class="text-gray-500">76 items</p>
+                    </div>
+                    <div class="category-card bg-[#F8F9FA] rounded-lg p-6 text-center cursor-pointer hover:shadow-lg transition-shadow">
+                        <img src="https://public.readdy.ai/ai/img_res/98d2c8a0d0f57e86c0e3abf5d5568e20.jpg" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-semibold">Motivational</h3>
+                        <p class="text-gray-500">64 items</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-[#F8F9FA]">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-bold">Best Sellers</h2>
+                    <button class="text-primary hover:text-primary/80">View All</button>
+                </div>
+                <div class="grid grid-cols-3 gap-6" id="products-grid">
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="bg-[#F8F9FA] rounded-2xl p-12">
+                    <div class="flex items-center">
+                        <div class="w-1/2 pr-12">
+                            <h2 class="text-3xl font-bold mb-6">Create Your Custom Stickers</h2>
+                            <p class="text-gray-600 mb-8">Upload your design and we'll turn it into high-quality stickers. Perfect for personal use or business branding.</p>
+                            <div class="bg-white rounded-lg p-6 mb-6">
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors">
+                                    <i class="ri-upload-cloud-line text-4xl text-gray-400 mb-4"></i>
+                                    <p class="text-gray-600">Drag and drop your design here or <span class="text-primary">browse files</span></p>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Size</label>
+                                    <div class="flex space-x-4">
+                                        <button class="flex-1 py-2 border-2 border-primary text-primary !rounded-button">Small</button>
+                                        <button class="flex-1 py-2 border-2 border-gray-200 text-gray-600 !rounded-button">Medium</button>
+                                        <button class="flex-1 py-2 border-2 border-gray-200 text-gray-600 !rounded-button">Large</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Material</label>
+                                    <button class="w-full text-left px-4 py-2 bg-white border border-gray-200 rounded-lg flex items-center justify-between" onclick="toggleMaterialDropdown()">
+                                        <span>Matte Vinyl</span>
+                                        <i class="ri-arrow-down-s-line"></i>
+                                    </button>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+                                    <div class="flex items-center space-x-4">
+                                        <button class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-lg" onclick="decreaseQuantity()">-</button>
+                                        <input type="text" value="50" class="w-20 text-center border-none" id="quantity-input">
+                                        <button class="w-10 h-10 flex items-center justify-center border border-gray-200 rounded-lg" onclick="increaseQuantity()">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-1/2">
+                            <img src="https://public.readdy.ai/ai/img_res/9a69104e887fb60593ecbf7a4244f4a1.jpg" class="w-full h-auto rounded-lg shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-[#F8F9FA]">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-12 text-center">What Our Customers Say</h2>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                            <div>
+                                <h4 class="font-semibold">Emily Thompson</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"Amazing quality stickers! The colors are vibrant and the material is durable. I've put them on my laptop and water bottle, and they still look perfect after months of use."</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                            <div>
+                                <h4 class="font-semibold">Michael Rodriguez</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"The custom sticker service is fantastic! They helped me create perfect stickers for my small business. The customer service was exceptional throughout the process."</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                            <div>
+                                <h4 class="font-semibold">Sarah Chen</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                    <i class="ri-star-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">"Fast shipping and excellent packaging. The stickers arrived in perfect condition and look even better in person than they did online!"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="grid grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-['Pacifico'] text-2xl text-primary mb-4">logo</h3>
+                    <p class="text-gray-600 mb-4">Express yourself with our high-quality custom stickers.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors">
+                            <i class="ri-instagram-line"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors">
+                            <i class="ri-pinterest-line"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors">
+                            <i class="ri-tiktok-line"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Shop</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-primary">All Products</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Best Sellers</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Custom Orders</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Help</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-primary">FAQ</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Shipping</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Returns</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Newsletter</h4>
+                    <p class="text-gray-600 mb-4">Subscribe to get special offers and updates.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="flex-1 px-4 py-2 border-none rounded-l-lg bg-gray-50">
+                        <button class="px-6 py-2 bg-primary text-white !rounded-r-lg hover:bg-primary/90 whitespace-nowrap">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t">
+                <div class="flex items-center justify-between">
+                    <p class="text-gray-600">&copy; 2025 Sticker Store. All rights reserved.</p>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://public.readdy.ai/ai/img_res/5fb4d35e960e86a8a359d5a557707029.jpg" alt="Payment Methods" class="h-8">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast bg-white shadow-lg rounded-lg p-4" id="toast">
+        <div class="flex items-center">
+            <i class="ri-checkbox-circle-line text-green-500 text-xl mr-3"></i>
+            <p class="text-gray-800">Item added to cart!</p>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "Aesthetic Flower Pack",
+                price: 4.99,
+                image: "https://public.readdy.ai/ai/img_res/4007f3a6d564f8ff28da3a1fe6bd5a35.jpg"
+            },
+            {
+                id: 2,
+                name: "Kawaii Animals Set",
+                price: 5.99,
+                image: "https://public.readdy.ai/ai/img_res/b8bd17cddbb4569fac45824ff8f34992.jpg"
+            },
+            {
+                id: 3,
+                name: "Minimalist Shapes",
+                price: 3.99,
+                image: "https://public.readdy.ai/ai/img_res/29ca0eda739f53f2d4590119ea8696ed.jpg"
+            },
+            {
+                id: 4,
+                name: "Galaxy Dreams",
+                price: 6.99,
+                image: "https://public.readdy.ai/ai/img_res/535c2c104b5d1d787be99e58f9ddf6b1.jpg"
+            },
+            {
+                id: 5,
+                name: "Retro Gaming Pack",
+                price: 5.99,
+                image: "https://public.readdy.ai/ai/img_res/93b859205aecc9aa5e79d941a6861c29.jpg"
+            },
+            {
+                id: 6,
+                name: "Plant Lovers Collection",
+                price: 4.99,
+                image: "https://public.readdy.ai/ai/img_res/9a87927292492bc67b156a2ac05abc27.jpg"
+            }
+        ];
+
+        const productsGrid = document.getElementById('products-grid');
+        const toast = document.getElementById('toast');
+        let quantity = 50;
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow';
+            productCard.innerHTML = `
+                <img src="${product.image}" class="w-full h-64 object-cover" alt="${product.name}">
+                <div class="p-4">
+                    <h3 class="font-semibold mb-2">${product.name}</h3>
+                    <div class="flex items-center justify-between">
+                        <span class="text-lg">$${product.price}</span>
+                        <button onclick="addToCart(${product.id})" class="w-10 h-10 flex items-center justify-center bg-primary text-white !rounded-button hover:bg-primary/90">
+                            <i class="ri-shopping-cart-line"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            productsGrid.appendChild(productCard);
+        });
+
+        function addToCart(productId) {
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function decreaseQuantity() {
+            if (quantity > 1) {
+                quantity -= 1;
+                document.getElementById('quantity-input').value = quantity;
+            }
+        }
+
+        function increaseQuantity() {
+            quantity += 1;
+            document.getElementById('quantity-input').value = quantity;
+        }
+
+        function toggleMaterialDropdown() {
+            // Implementation for material dropdown
+        }
+
+        function toggleCart() {
+            // Implementation for cart sidebar
+        }
+
+        function toggleUserMenu() {
+            // Implementation for user menu dropdown
+        }
+    </script>
+</body>
+</html>
